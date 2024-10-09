@@ -117,3 +117,25 @@ dependencies {
         implementation jscFlavor
     }
 }
+project.ext.vectoricons = [
+    iconFontNames: [
+  'AntDesign.ttf',                // AntDesign from AntFinance (298 icons)
+  'Entypo.ttf',                   // Entypo by Daniel Bruce (v1.0.1 with 411 icons)
+  'EvilIcons.ttf',                // EvilIcons designed by Alexander Madyankin & Roman Shamin (v1.10.1 with 70 icons)
+  'Feather.ttf',                  // Feather created by Cole Bemis & Contributors (v4.28.0 featuring 286 icons)
+  'FontAwesome.ttf',              // FontAwesome by Dave Gandy (v4.7.0 containing 675 icons)
+  'FontAwesome5.ttf',             // FontAwesome 5 from Fonticons, Inc. (v5.15.3 offering 1,598 free and 7,848 pro icons)
+  'FontAwesome6.ttf',             // FontAwesome 6 designed by Fonticons, Inc. (v6.1.2 featuring 2,016 free and 16,150 pro icons)
+  'Fontisto.ttf',                 // Fontisto created by Kenan Gündoğan (v3.0.4 featuring 615 icons)
+  'Foundation.ttf',               // Foundation by ZURB, Inc. (v3.0 with 283 icons)
+  'Ionicons.ttf',                 // Ionicons crafted by Ionic (v7.1.0 containing 1,338 icons)
+  'MaterialIcons.ttf',            // MaterialIcons by Google, Inc. (v4.0.0 featuring 2,189 icons)
+  'MaterialCommunityIcons.ttf',   // MaterialCommunityIcons from MaterialDesignIcons.com (v6.5.95 including 6,596 icons)
+  'Octicons.ttf',                 // Octicons designed by Github, Inc. (v16.3.1 with 250 icons)
+  'Zocial.ttf',                   // Zocial by Sam Collins (v1.4.0 with 100 icons)
+  'SimpleLineIcons.ttf'           // SimpleLineIcons crafted by thesabbir (not specified in your original list)
+]
+
+]
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
