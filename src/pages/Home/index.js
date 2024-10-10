@@ -6,6 +6,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import api from "../../services/GameApi/api";
 import CategoryList from "../../components/CategoryList";
 import GameList from "../../components/GamesList";
+import { useIsFocused } from "@react-navigation/native";
 
 //d5403774822a4e22be1b215ce2f7e78e // CHAVE API
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
@@ -14,22 +15,28 @@ export default function Home() {
     const [categorys, setCategorys] = useState([])
     const [games, setGames] = useState([])
     const [loadingHome, setLoadingHome] = useState(false)
+    const isFocused = useIsFocused()
 
     useEffect(() => {
-        let isActive = true
-        setLoadingHome(true)
-        function lookingFor() {
 
-            handleCategorys()
-            HandleGames()
+        setLoadingHome(true)
+
+        async function lookingFor() {
+
+            try {
+                await Promise.all([handleCategorys(), HandleGames()]) // Promisse.all permite a busca ao mesmo tempo dos dois dados, categorias e games...
+            } catch (error) {
+                console.log(error)
+            }
 
             setLoadingHome(false)
+
         }
-
-        lookingFor()
-
-        return () => isActive = false
-    }, [])
+        if (isFocused) {
+            lookingFor() // Vai ser sempre chamada quando o componente estiver em foco, isFocused
+        }
+        return lookingFor
+    }, [isFocused])
 
 
     async function handleCategorys() {
@@ -186,6 +193,7 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 // ------------------------------------------ //
 
 const ContentTrending = styled.View`
+    padding-top: 10px;
     flex: 1;
  
 `;
