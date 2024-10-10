@@ -1,11 +1,194 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components/native";
+import SearchIcon from 'react-native-vector-icons/Ionicons'
+import FavIcon from 'react-native-vector-icons/Ionicons'
+import { ActivityIndicator, Text, View } from "react-native";
+import api from "../../services/GameApi/api";
+import CategoryList from "../../components/CategoryList";
+import GameList from "../../components/GamesList";
+
+//d5403774822a4e22be1b215ce2f7e78e // CHAVE API
+let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 
 export default function Home() {
+    const [categorys, setCategorys] = useState([])
+    const [games, setGames] = useState([])
+    const [loadingHome, setLoadingHome] = useState(false)
+
+    useEffect(() => {
+        let isActive = true
+        setLoadingHome(true)
+        function lookingFor() {
+
+            handleCategorys()
+            HandleGames()
+
+            setLoadingHome(false)
+        }
+
+        lookingFor()
+
+        return () => isActive = false
+    }, [])
+
+
+    async function handleCategorys() {
+
+        try {
+            const response = await api.get('/genres', {
+
+                params: {
+                    key: keyApi,
+                    ordering: 'name',// Qual campo usar ao ordenar os resultados.
+                    page: 1,//  Um número de página dentro do conjunto de resultados paginado obs: precisa ser passado
+                    page_size: '', // Número de resultados a serem retornados por página.
+                }
+            }
+            )
+
+            const data = response.data.results
+            setCategorys(data)
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+    async function HandleGames() {
+        try {
+            const response = await api.get('/games', {
+                params: {
+                    key: keyApi,
+                    ordering: 'rating',
+                    page: 1,
+                    page_size: 5,
+                }
+            })
+            const data = response.data.results
+            setGames(data)
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    if (loadingHome) {
+        return (
+            <Background>
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                    <ActivityIndicator size={"large"} color={'#FFFF'} />
+                </View>
+            </Background>
+        )
+
+    }
+
+
+
 
     return (
-        <View style={{ flex: 1 }}>
-            <Text> home</Text>
-        </View>
+        <Background>
+            <Header>
+                <ContentHeader>
+                    <NameApp colorText={'#ffffff'}> Game<NameApp colorText={'#ff455f'}>APP</NameApp></NameApp>
+                    <Button BG={'#64748b'}>
+                        <View>
+                            <FavIcon name='bookmarks-outline' color={'#ffffff'} size={20} />
+                        </View>
+                    </Button>
+                </ContentHeader>
+                <ContentHeader>
+                    <Input
+                        placeholder="Looking for a game?"
+                        placeholderTextColor={'#ffffff'}
+                    />
+                    <Button BG={'transparent'}>
+                        <SearchIcon name='search-outline' color={'#ff455f'} size={30} />
+                    </Button>
+                </ContentHeader>
+            </Header >
+            <AreaCategorys>
+                <List
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={item => item.id}
+                    data={categorys}
+                    renderItem={({ item }) => <CategoryList data={item} />}
+                />
+            </AreaCategorys>
+            <ContentTrending>
+                <Text style={{ color: '#ffffff', fontSize: 20 }}>Trending Games </Text>
+                <List
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={item => item.id}
+                    data={games}
+                    renderItem={({ item }) => <GameList data={item} />}
+                />
+
+            </ContentTrending>
+
+        </Background >
     )
 }
+
+
+const Background = styled.SafeAreaView`
+    flex: 1;
+    background-color: #050B18;
+    padding: 2%;
+`;
+
+const Header = styled.View`
+    height: 120px;
+`;
+
+const NameApp = styled.Text`
+    font-size: 25px;
+    color: ${props => props.colorText};
+`;
+
+const Input = styled.TextInput`
+    background-color: #1f2430;
+    flex: 1;
+    border-radius: 25px;
+    padding-left: 20px;
+    max-height: 40px;
+`;
+
+const Button = styled.TouchableOpacity`
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: ${props => props.BG};
+    height: 30px;
+    width: 30px;
+    justify-content: center;
+    align-items:center;
+    border-radius: 80px;
+`;
+
+const ContentHeader = styled.View`
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+`;
+
+// ------------------------------------------ //
+
+const AreaCategorys = styled.View`
+    height: 35px;
+`;
+
+const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
+
+// ------------------------------------------ //
+
+const ContentTrending = styled.View`
+    flex: 1;
+ 
+`;
+
+
+
