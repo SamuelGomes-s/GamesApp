@@ -68,7 +68,7 @@ export default function Home() {
             const response = await api.get('/games', {
                 params: {
                     key: keyApi,
-                    ordering: 'rating',
+                    ordering: 'rating_top',
                     page: 1,
                     page_size: 5,
                 }

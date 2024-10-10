@@ -4,11 +4,13 @@ import styled from "styled-components/native";
 import Star from "react-native-vector-icons/Ionicons"
 export default function GameList({ data }) {
 
+    let urlImage = !data.background_image ? "https:" : data.background_image
+
     return (
         <Container>
             <Image
                 style={{ width: '100%', height: 200, resizeMode: 'cover' }}
-                source={{ uri: data.background_image }}
+                source={{ uri: urlImage }}
             />
             <Content>
                 <Label> {data.name}</Label>
@@ -23,7 +25,7 @@ export default function GameList({ data }) {
 
 const Container = styled.TouchableOpacity`
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #121212; /* Para aqueles casos em que não possuir background e o nome do ficar legivel.*/ 
     margin-top: 15px;
     max-height: 300px;
 
