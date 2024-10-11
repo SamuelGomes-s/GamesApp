@@ -1,53 +1,45 @@
-import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import api from "../../services/GameApi/api";
 import GameList from "../../components/GamesList";
 import Header from "../../components/Header";
 import { ActivityIndicator, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import api from "../../services/GameApi/api";
 
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 
-export default function Category() {
-
+export default function Search() {
     const route = useRoute()
-    const [loading, setLoading] = useState(false)
+    const { inputText } = route?.params
+
     const [games, setGames] = useState([])
-
-    const { idCategory } = route?.params
-
-
-
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-
         setLoading(true)
-
-        async function handleSearchGames() {
-
+        async function handleSearchGame() {
             try {
-                const response = await api.get('/games', {
+                const response = await api.get('/games',{
                     params: {
                         key: keyApi,
-                        genres: idCategory, // Filtrar por gêneros, por exemplo: 4,51ou action,indie.
-                        ordering: 'rating-top',// Qual campo usar ao ordenar os resultados.
+                        search: inputText, // Filtrar por nome 
+                        search_exact: true,
+                        ordering: 'name',// Qual campo usar ao ordenar os resultados.
                         page: 1,//  Um número de página dentro do conjunto de resultados paginado obs: precisa ser passado
                         page_size: '', // Número de resultados a serem retornados por página.
                     }
-
                 })
                 const data = response.data.results
                 setGames(data)
             } catch (error) {
                 console.log(error)
-
             }
             setLoading(false)
-
         }
-        handleSearchGames()
-
+        handleSearchGame()
     }, [])
+
+
 
     if (loading) {
         return (
@@ -62,10 +54,12 @@ export default function Category() {
 
     return (
         <Background>
-            <Header title={'Categorys'} />
+            <Header title={'Search'} />
+
             <AreList>
                 <List
                     keyExtractor={item => item.id}
+                    showsVerticalScrollIndicator={false}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
                 />

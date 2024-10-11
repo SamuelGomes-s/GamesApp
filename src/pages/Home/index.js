@@ -6,7 +6,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import api from "../../services/GameApi/api";
 import CategoryList from "../../components/CategoryList";
 import GameList from "../../components/GamesList";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 //d5403774822a4e22be1b215ce2f7e78e // CHAVE API
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
@@ -15,10 +15,12 @@ export default function Home() {
     const [categorys, setCategorys] = useState([])
     const [games, setGames] = useState([])
     const [loadingHome, setLoadingHome] = useState(false)
+    const [inputText, setInputText] = useState('')
     const isFocused = useIsFocused()
+    const navigation = useNavigation()
 
     useEffect(() => {
-
+        setInputText('')
         setLoadingHome(true)
 
         async function lookingFor() {
@@ -92,7 +94,12 @@ export default function Home() {
 
     }
 
+    function searchGame() {
+        if (inputText == '') return;
 
+        navigation.navigate('Search', { inputText })
+
+    }
 
 
     return (
@@ -110,8 +117,10 @@ export default function Home() {
                     <Input
                         placeholder="Looking for a game?"
                         placeholderTextColor={'#ffffff'}
+                        value={inputText}
+                        onChangeText={(text) => setInputText(text)}
                     />
-                    <Button BG={'transparent'}>
+                    <Button BG={'transparent'} onPress={() => searchGame()}>
                         <SearchIcon name='search-outline' color={'#ff455f'} size={30} />
                     </Button>
                 </ContentHeader>
@@ -162,6 +171,7 @@ const Input = styled.TextInput`
     border-radius: 25px;
     padding-left: 20px;
     max-height: 40px;
+    color: #ffff; 
 `;
 
 const Button = styled.TouchableOpacity`
