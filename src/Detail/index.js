@@ -30,7 +30,7 @@ export default function Detail() {
             if (favoritesGames.length != 0) {
                 favoritesGames.map(game => {
                     if (game.id === newGame.id) { // Verificando se o jogo existe
-                        gameExists = true 
+                        gameExists = true
                     }
                 })
 
@@ -52,7 +52,7 @@ export default function Detail() {
     return (
         <Background>
             <ScrollView showsVerticalScrollIndicator={false}  >
-                <View style={{
+                <View   style={{
                     position: "absolute",
                     top: 20,
                     left: 10,
@@ -70,7 +70,7 @@ export default function Detail() {
                         <BackIcon name='bookmark-outline' color={"#ffffff"} size={25} />
                     </ButtonActions>
                 </View>
-                <AreaList style={{ maxHeight: 200 }}>
+                <AreaList style={{ height: 200, maxHeight: 200, backgroundColor: '#64748b' }}>
                     <List
                         keyExtractor={item => item.id}
                         horizontal={true}
@@ -107,7 +107,7 @@ export default function Detail() {
                 <AreaList style={{}}>
                     <Label style={{ fontSize: 20, marginTop: 10 }}>Platforms</Label>
                     <List
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.platform.id}
                         horizontal={true}
                         renderItem={({ item }) => ListPlatforms(item)}
                         data={platforms}
@@ -117,7 +117,7 @@ export default function Detail() {
                 <AreaList style={{}}>
                     <Label style={{ fontSize: 20, marginTop: 10 }}>Stores</Label>
                     <List
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.store.id}
                         horizontal={true}
                         renderItem={({ item }) => ListStores(item)}
                         data={stores}
@@ -146,7 +146,7 @@ export default function Detail() {
 
 const ListImages = ((item) => {
     return (
-        <View key={item.id} style={{ height: 200 }}>
+        <View key={item.id.toString()} style={{ height: 200 }}>
             <Image
                 style={{ width: 400, height: 200 }}
                 source={{ uri: item.image }}
@@ -155,8 +155,9 @@ const ListImages = ((item) => {
     )
 })
 const ListGenres = ((item) => {
+
     return (
-        <View key={item.id}>
+        <View key={item.id.toString()}>
             <Container BG={'#64748b'} style={{ marginBottom: 10 }}>
                 <Content>
                     <Label> {item.name}</Label>
@@ -167,8 +168,9 @@ const ListGenres = ((item) => {
 })
 
 const ListPlatforms = ((item) => {
+
     return (
-        <View key={item.id} >
+        <View key={item.platform.id.toString()} >
             <Container BG={'#0f172a'}>
                 <Content>
                     <Label style={{ textAlign: "center" }}> {item.platform.name}</Label>
@@ -179,7 +181,7 @@ const ListPlatforms = ((item) => {
 })
 const ListStores = ((item) => {
     return (
-        <View key={item.id} style={{ justifyContent: "center" }}>
+        <View key={item.store.id.toString()} style={{ justifyContent: "center" }}>
             <Container BG={'#0f172a'}>
                 <Content>
                     <Label> {item.store.name}</Label>
