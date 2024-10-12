@@ -1,42 +1,40 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import GameList from "../../components/GamesList";
 import Header from "../../components/Header";
-import { ActivityIndicator, View } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import api from "../../services/GameApi/api";
-
-let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import FavoritesGames from "../../components/FavoriteGames";
 
 export default function Favorites() {
 
-
-
     const [games, setGames] = useState([])
-    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
 
-    }, [])
+        async function favoritesGames() {
+
+            try {
+                const storageLocal = await AsyncStorage.getItem("@games")
+                let favorites = storageLocal ? JSON.parse(storageLocal) : []
+                setGames(favorites)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        favoritesGames()
+    }, [games])
 
 
 
-    if (loading) {
-        return (
-            <Background>
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <ActivityIndicator size={"large"} color={'#FFFF'} />
-                </View>
-            </Background>
-        )
 
-    }
 
     return (
         <Background>
             <Header title={'My favorites'} />
 
-
+            <AreaList>
+                <List data={games} renderItem={({ item }) => <FavoritesGames data={item}  gameLocal={setGames}/>} />
+            </AreaList>
         </Background>
     )
 }
@@ -51,9 +49,4 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 
 const AreaList = styled.View`
     flex: 1;
-`;
-const Label = styled.Text`
-    margin-top: 20px;
-    text-align: center;
-    color: #ffff;
 `;

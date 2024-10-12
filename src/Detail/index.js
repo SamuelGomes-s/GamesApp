@@ -4,6 +4,7 @@ import { Image, Modal, ScrollView, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Star from "react-native-vector-icons/Ionicons";
 import BackIcon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 let textLorem = 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.';
 
 
@@ -11,23 +12,43 @@ export default function Detail() {
     const route = useRoute()
     const { data } = route?.params
     const navigation = useNavigation()
+    let gameData = data
     const [imagesGame, setImagesGame] = useState(data.short_screenshots)
     const [genresGame, setGenresGame] = useState(data.genres)
     const [platforms, setPlatforms] = useState(data.platforms)
     const [modalVisible, setModalVisible] = useState(false)
     const [stores, setStores] = useState(data.stores)
-
     function goBack() {
         return navigation.goBack()
     }
 
-    async function handleFavoritesGames() {
+    async function handleFavoritesGames(newGame) {
         try {
+            const storageLocal = await AsyncStorage.getItem('@games') // Recuperando games salvos se existir
+            let favoritesGames = storageLocal ? JSON.parse(storageLocal) : []
+            let gameExists = false
+            if (favoritesGames.length != 0) {
+                favoritesGames.map(game => {
+                    if (game.id === newGame.id) { // Verificando se o jogo existe
+                        gameExists = true 
+                    }
+                })
+
+            }
+            if (!gameExists) {
+                favoritesGames.push(newGame) //Adicionando novo jogo
+                await AsyncStorage.setItem('@games', JSON.stringify(favoritesGames)) // salvando
+                console.log('O jogo n existe, portanto foi salvo')
+                return
+            }
+            console.log('O jogo existe, portanto não foi salvo')
 
         } catch (error) {
             console.log(error)
         }
     }
+
+
     return (
         <Background>
             <ScrollView showsVerticalScrollIndicator={false}  >
@@ -45,7 +66,7 @@ export default function Detail() {
                     <ButtonActions onPress={() => goBack()}>
                         <BackIcon name='arrow-back-outline' color={"#ffffff"} size={25} />
                     </ButtonActions>
-                    <ButtonActions onPress={() => handleFavoritesGames()}>
+                    <ButtonActions onPress={() => handleFavoritesGames(gameData)}>
                         <BackIcon name='bookmark-outline' color={"#ffffff"} size={25} />
                     </ButtonActions>
                 </View>
