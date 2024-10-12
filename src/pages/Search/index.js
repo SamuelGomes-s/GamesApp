@@ -19,7 +19,7 @@ export default function Search() {
         setLoading(true)
         async function handleSearchGame() {
             try {
-                const response = await api.get('/games',{
+                const response = await api.get('/games', {
                     params: {
                         key: keyApi,
                         search: inputText, // Filtrar por nome 
@@ -56,15 +56,17 @@ export default function Search() {
         <Background>
             <Header title={'Search'} />
 
-            <AreList>
+            {games.length === 0 ? (<Label>
+                Não encontramos um jogo com esse nome...
+            </Label>) : (<AreList>
                 <List
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
                 />
-            </AreList>
-
+            </AreList>)
+            }
         </Background>
     )
 }
@@ -79,4 +81,9 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 
 const AreList = styled.View`
     flex: 1;
+`;
+const Label = styled.Text`
+    margin-top: 20px;
+    text-align: center;
+    color: #ffff;
 `;

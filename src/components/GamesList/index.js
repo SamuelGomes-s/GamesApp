@@ -1,13 +1,18 @@
 import React from "react";
-import { Image, Text } from "react-native";
+import { Image } from "react-native";
 import styled from "styled-components/native";
 import Star from "react-native-vector-icons/Ionicons"
+import { useNavigation } from "@react-navigation/native";
 export default function GameList({ data }) {
 
+    const navigation = useNavigation()
     let urlImage = !data.background_image ? "https:" : data.background_image
 
+    function details() {
+        return navigation.navigate('Detail', { data })
+    }
     return (
-        <Container>
+        <Container onPress={() => details()}>
             <Image
                 style={{ width: '100%', height: 200, resizeMode: 'cover' }}
                 source={{ uri: urlImage }}

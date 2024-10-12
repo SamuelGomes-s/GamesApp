@@ -100,14 +100,17 @@ export default function Home() {
         navigation.navigate('Search', { inputText })
 
     }
+    function favorites() {
 
+        return navigation.navigate('Favorites')
+    }
 
     return (
         <Background>
             <Header>
                 <ContentHeader>
                     <NameApp colorText={'#ffffff'}> Game<NameApp colorText={'#ff455f'}>APP</NameApp></NameApp>
-                    <Button BG={'#64748b'}>
+                    <Button BG={'#64748b'} onPress={() => favorites()}>
                         <View>
                             <FavIcon name='bookmarks-outline' color={'#ffffff'} size={20} />
                         </View>

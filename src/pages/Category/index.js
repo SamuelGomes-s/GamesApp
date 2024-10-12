@@ -63,13 +63,13 @@ export default function Category() {
     return (
         <Background>
             <Header title={'Categorys'} />
-            <AreList>
+            <AreaList>
                 <List
                     keyExtractor={item => item.id}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
                 />
-            </AreList>
+            </AreaList>
 
         </Background>
     )
@@ -83,6 +83,6 @@ const Background = styled.SafeAreaView`
 
 const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 
-const AreList = styled.View`
+const AreaList = styled.View`
     flex: 1;
 `;
