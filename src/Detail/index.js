@@ -1,76 +1,123 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { Image, View } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import Star from "react-native-vector-icons/Ionicons"
+import { Image, Modal, ScrollView, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import Star from "react-native-vector-icons/Ionicons";
+import BackIcon from "react-native-vector-icons/Ionicons";
 let textLorem = 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.';
 
 
 export default function Detail() {
     const route = useRoute()
     const { data } = route?.params
-
+    const navigation = useNavigation()
     const [imagesGame, setImagesGame] = useState(data.short_screenshots)
     const [genresGame, setGenresGame] = useState(data.genres)
     const [platforms, setPlatforms] = useState(data.platforms)
+    const [modalVisible, setModalVisible] = useState(false)
     const [stores, setStores] = useState(data.stores)
 
+    function goBack() {
+        return navigation.goBack()
+    }
 
+    async function handleFavoritesGames() {
+        try {
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <Background>
-            <AreaList style={{ maxHeight: 200 }}>
-                <List
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) => ListImages(item)}
-                    data={imagesGame}
-                />
-            </AreaList>
-            <AreaRatig>
-                <Star name='star-half-outline' size={22} color={'#FA1E'} />
-                <Label> {data.rating} </Label>
-            </AreaRatig>
-            <Label style={{ fontSize: 20 }}> {data.name}</Label>
+            <ScrollView showsVerticalScrollIndicator={false}  >
+                <View style={{
+                    position: "absolute",
+                    top: 20,
+                    left: 10,
+                    zIndex: 99,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: '100%',
+                    paddingHorizontal: 20,
+                    marginTop: 15
+                }}>
+                    <ButtonActions onPress={() => goBack()}>
+                        <BackIcon name='arrow-back-outline' color={"#ffffff"} size={25} />
+                    </ButtonActions>
+                    <ButtonActions onPress={() => handleFavoritesGames()}>
+                        <BackIcon name='bookmark-outline' color={"#ffffff"} size={25} />
+                    </ButtonActions>
+                </View>
+                <AreaList style={{ maxHeight: 200 }}>
+                    <List
+                        keyExtractor={item => item.id}
+                        horizontal={true}
+                        renderItem={({ item }) => ListImages(item)}
+                        data={imagesGame}
+                    />
+                </AreaList>
+                <AreaRatig>
+                    <Star name='star-half-outline' size={22} color={'#FA1E'} />
+                    <Label> {data.rating} </Label>
+                </AreaRatig>
+                <Label style={{ fontSize: 20 }}> {data.name}</Label>
 
-            <AreaList style={{ maxHeight: 85 }}>
-                <Label style={{ fontSize: 20, marginTop: 10 }}>Genres</Label>
-                <List
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) => ListGenres(item)}
-                    data={genresGame}
-                />
-            </AreaList>
+                <AreaList style={{ maxHeight: 85 }}>
+                    <Label style={{ fontSize: 20, marginTop: 10 }}>Genres</Label>
+                    <List
+                        keyExtractor={item => item.id}
+                        horizontal={true}
+                        renderItem={({ item }) => ListGenres(item)}
+                        data={genresGame}
+                    />
+                </AreaList>
 
-            <AreaDescription>
-                <Label> Description</Label>
-                <Description numberOfLines={7}  ellipsizeMode="tail">
-                    {textLorem}
-                </Description>
-                <ButtonModal>
-                    <Label>Read full description</Label>
-                </ButtonModal>
-            </AreaDescription>
+                <AreaDescription>
+                    <Label> Description</Label>
+                    <Description numberOfLines={7} ellipsizeMode="tail">
+                        {textLorem}
+                    </Description>
+                    <ButtonModal onPress={() => setModalVisible(true)}>
+                        <Label>Read full description</Label>
+                    </ButtonModal>
+                </AreaDescription>
 
-            <AreaList style={{}}>
-                <Label style={{ fontSize: 20, marginTop: 10 }}>Platforms</Label>
-                <List
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) => ListPlatforms(item)}
-                    data={platforms}
-                />
-            </AreaList>
+                <AreaList style={{}}>
+                    <Label style={{ fontSize: 20, marginTop: 10 }}>Platforms</Label>
+                    <List
+                        keyExtractor={item => item.id}
+                        horizontal={true}
+                        renderItem={({ item }) => ListPlatforms(item)}
+                        data={platforms}
+                    />
+                </AreaList>
 
-            <AreaList style={{}}>
-                <Label style={{ fontSize: 20, marginTop: 10 }}>Stores</Label>
-                <List
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) => ListStores(item)}
-                    data={stores}
-                />
-            </AreaList>
+                <AreaList style={{}}>
+                    <Label style={{ fontSize: 20, marginTop: 10 }}>Stores</Label>
+                    <List
+                        keyExtractor={item => item.id}
+                        horizontal={true}
+                        renderItem={({ item }) => ListStores(item)}
+                        data={stores}
+                    />
+                </AreaList>
+            </ScrollView>
+            <Modal visible={modalVisible}>
+                <Background style={{ backgroundColor: '#0F172A', justifyContent: "center", alignItems: "center", paddingTop: 25 }}>
+                    <View style={{ position: "absolute", top: 20, left: 10 }}>
+                        <ButtonActions onPress={() => setModalVisible(false)}>
+                            <BackIcon name='arrow-back-outline' color={"#ffffff"} size={25} />
+                        </ButtonActions>
+                    </View>
+                    <Label style={{ fontSize: 20, marginBottom: 15 }}> Description</Label>
+                    <AreaDescription style={{ flex: 1 }}>
+                        <Description>
+                            {textLorem}
+                        </Description>
+                    </AreaDescription>
+                </Background>
+            </Modal>
         </Background>
     )
 }
@@ -78,7 +125,7 @@ export default function Detail() {
 
 const ListImages = ((item) => {
     return (
-        <View style={{ height: 200 }}>
+        <View key={item.id} style={{ height: 200 }}>
             <Image
                 style={{ width: 400, height: 200 }}
                 source={{ uri: item.image }}
@@ -88,7 +135,7 @@ const ListImages = ((item) => {
 })
 const ListGenres = ((item) => {
     return (
-        <View>
+        <View key={item.id}>
             <Container BG={'#64748b'} style={{ marginBottom: 10 }}>
                 <Content>
                     <Label> {item.name}</Label>
@@ -100,7 +147,7 @@ const ListGenres = ((item) => {
 
 const ListPlatforms = ((item) => {
     return (
-        <View >
+        <View key={item.id} >
             <Container BG={'#0f172a'}>
                 <Content>
                     <Label style={{ textAlign: "center" }}> {item.platform.name}</Label>
@@ -111,7 +158,7 @@ const ListPlatforms = ((item) => {
 })
 const ListStores = ((item) => {
     return (
-        <View style={{ justifyContent: "center" }}>
+        <View key={item.id} style={{ justifyContent: "center" }}>
             <Container BG={'#0f172a'}>
                 <Content>
                     <Label> {item.store.name}</Label>
@@ -133,11 +180,7 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 
 const AreaList = styled.View`
 `;
-// const Label = styled.Text`
-//     margin-top: 20px;
-//     text-align: center;
-//     color: #ffff;
-// `;
+
 const AreaRatig = styled.View`
     margin-top: 10px;
     flex-direction: row;
@@ -172,7 +215,7 @@ const AreaDescription = styled.View`
 
 const Description = styled.Text`
     margin-top: 5px;
-    color: #1F2430;
+    color: #EFEFEFB2;
 `;
 
 const ButtonModal = styled.TouchableOpacity`
@@ -185,6 +228,14 @@ const ButtonModal = styled.TouchableOpacity`
     align-items: center;
 `;
 
+const ButtonActions = styled.TouchableOpacity`
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #050B18;
+    justify-content: center;
+    align-items: center; 
+`;
 
 
 
