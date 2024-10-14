@@ -18,6 +18,7 @@ export default function Detail() {
     const [platforms, setPlatforms] = useState(data.platforms)
     const [modalVisible, setModalVisible] = useState(false)
     const [stores, setStores] = useState(data.stores)
+
     function goBack() {
         return navigation.goBack()
     }
@@ -52,7 +53,7 @@ export default function Detail() {
     return (
         <Background>
             <ScrollView showsVerticalScrollIndicator={false}  >
-                <View   style={{
+                <View style={{
                     position: "absolute",
                     top: 20,
                     left: 10,
@@ -124,7 +125,7 @@ export default function Detail() {
                     />
                 </AreaList>
             </ScrollView>
-            <Modal visible={modalVisible}>
+            <Modal visible={modalVisible} animationType="slide">
                 <Background style={{ backgroundColor: '#0F172A', justifyContent: "center", alignItems: "center", paddingTop: 25 }}>
                     <View style={{ position: "absolute", top: 20, left: 10 }}>
                         <ButtonActions onPress={() => setModalVisible(false)}>

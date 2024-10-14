@@ -12,11 +12,15 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 
 export default function Home() {
+    const gamesPerPage = 5
+
     const [categorys, setCategorys] = useState([])
     const [games, setGames] = useState([])
     const [loadingHome, setLoadingHome] = useState(false)
     const [inputText, setInputText] = useState('')
-    const isFocused = useIsFocused()
+    const [pageGames, setPageGames] = useState(1)
+    const [loadingGames, setLoadingGames] = useState(false)
+
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -34,11 +38,11 @@ export default function Home() {
             setLoadingHome(false)
 
         }
-        if (isFocused) {
-            lookingFor() // Vai ser sempre chamada quando o componente estiver em foco, isFocused
-        }
-        return lookingFor
-    }, [isFocused])
+
+        lookingFor()
+
+
+    }, [])
 
 
     async function handleCategorys() {
@@ -66,21 +70,36 @@ export default function Home() {
     }
 
     async function HandleGames() {
+
         try {
             const response = await api.get('/games', {
                 params: {
                     key: keyApi,
                     ordering: 'rating_top',
-                    page: 1,
-                    page_size: 5,
+                    page: pageGames,
+                    page_size: gamesPerPage,
                 }
             })
             const data = response.data.results
-            setGames(data)
+
+            if (pageGames <= 1) {
+                setGames(data)
+            } else {
+                setGames([...games, ...data])
+            }
+            setPageGames(pageGames + 1)
+            setLoadingGames(false)
         } catch (error) {
             console.log(error)
         }
 
+    }
+
+    function scrollPage() {
+        if (!loadingGames) {
+            setLoadingGames(true)
+            HandleGames()
+        }
     }
 
     if (loadingHome) {
@@ -144,7 +163,14 @@ export default function Home() {
                     keyExtractor={item => item.id}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
+                    onEndReached={scrollPage}
+                    onEndReachedThreshold={0.20}
                 />
+                {loadingGames &&
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={"large"} color={'#FFFF'} />
+                    </View>
+                }
 
             </ContentTrending>
 
@@ -208,7 +234,7 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 const ContentTrending = styled.View`
     padding-top: 10px;
     flex: 1;
- 
+    padding-bottom: 20px;
 `;
 
 
