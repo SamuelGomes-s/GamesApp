@@ -11,35 +11,61 @@ let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 export default function Search() {
     const route = useRoute()
     const { inputText } = route?.params
-
+    const perPage = 5
     const [games, setGames] = useState([])
+    const [pageGames, setPageGames] = useState(1)
     const [loading, setLoading] = useState(false)
+    const [loadingGames, setLoadingGames] = useState(false)
 
     useEffect(() => {
         setLoading(true)
         async function handleSearchGame() {
-            try {
-                const response = await api.get('/games', {
-                    params: {
-                        key: keyApi,
-                        search: inputText, // Filtrar por nome 
-                        search_exact: true,
-                        ordering: 'name',// Qual campo usar ao ordenar os resultados.
-                        page: 1,//  Um número de página dentro do conjunto de resultados paginado obs: precisa ser passado
-                        page_size: '', // Número de resultados a serem retornados por página.
-                    }
-                })
-                const data = response.data.results
-                setGames(data)
-            } catch (error) {
-                console.log(error)
-            }
+            await searchGames()
             setLoading(false)
+
         }
         handleSearchGame()
     }, [])
 
+    async function searchGames() {
 
+        try {
+            const response = await api.get('/games', {
+                params: {
+                    key: keyApi,
+                    search: inputText, // Filtrar por nome 
+                    search_exact: true,
+                    ordering: 'name',// Qual campo usar ao ordenar os resultados.
+                    page: pageGames,//  Um número de página dentro do conjunto de resultados paginado obs: precisa ser passado
+                    page_size: perPage, // Número de resultados a serem retornados por página.
+                }
+            })
+            const data = response.data.results
+
+            if (pageGames === 1) {
+                setGames(data)
+            } else (
+                setGames([...games, ...data])
+            )
+
+            setLoadingGames(false)
+
+        } catch (error) {
+            console.log(error)
+            setLoadingGames(false)
+
+        }
+
+    }
+
+    function scrollPage() {
+        if (!loadingGames) {
+            setLoadingGames(true)
+            setPageGames(pageGames + 1)
+            searchGames()
+
+        }
+    }
 
     if (loading) {
         return (
@@ -64,7 +90,10 @@ export default function Search() {
                     showsVerticalScrollIndicator={false}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
+                    onEndReached={scrollPage}
+                    onEndReachedThreshold={0.20}
                 />
+                {loadingGames && (<ActivityIndicator size={"large"} color={'#FFFF'} />)}
             </AreList>)
             }
         </Background>
