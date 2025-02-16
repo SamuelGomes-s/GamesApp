@@ -9,6 +9,7 @@ import api from "../../services/GameApi/api";
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 
 export default function Search() {
+
     const route = useRoute()
     const { inputText } = route?.params
     const perPage = 5
@@ -22,13 +23,11 @@ export default function Search() {
         async function handleSearchGame() {
             await searchGames()
             setLoading(false)
-
         }
         handleSearchGame()
     }, [])
 
     async function searchGames() {
-
         try {
             const response = await api.get('/games', {
                 params: {
@@ -41,21 +40,16 @@ export default function Search() {
                 }
             })
             const data = response.data.results
-
             if (pageGames === 1) {
                 setGames(data)
             } else (
                 setGames([...games, ...data])
             )
-
             setLoadingGames(false)
-
         } catch (error) {
             console.log(error)
             setLoadingGames(false)
-
         }
-
     }
 
     function scrollPage() {
@@ -63,7 +57,6 @@ export default function Search() {
             setLoadingGames(true)
             setPageGames(pageGames + 1)
             searchGames()
-
         }
     }
 
@@ -75,13 +68,11 @@ export default function Search() {
                 </View>
             </Background>
         )
-
     }
 
     return (
         <Background>
             <Header title={'Search'} />
-
             {games.length === 0 ? (<Label>
                 Não encontramos um jogo com esse nome...
             </Label>) : (<AreList>
@@ -111,6 +102,7 @@ const List = styled.FlatList``; // Lista de Categorias e tambem lista de jogos
 const AreList = styled.View`
     flex: 1;
 `;
+
 const Label = styled.Text`
     margin-top: 20px;
     text-align: center;

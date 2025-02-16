@@ -13,18 +13,11 @@ export default function Category() {
     const route = useRoute()
     const [loading, setLoading] = useState(false)
     const [games, setGames] = useState([])
-
     const { idCategory } = route?.params
 
-
-
-
     useEffect(() => {
-
         setLoading(true)
-
         async function handleSearchGames() {
-
             try {
                 const response = await api.get('/games', {
                     params: {
@@ -34,19 +27,15 @@ export default function Category() {
                         page: 1,//  Um número de página dentro do conjunto de resultados paginado obs: precisa ser passado
                         page_size: '', // Número de resultados a serem retornados por página.
                     }
-
                 })
                 const data = response.data.results
                 setGames(data)
             } catch (error) {
                 console.log(error)
-
             }
             setLoading(false)
-
         }
         handleSearchGames()
-
     }, [])
 
     if (loading) {
@@ -57,7 +46,6 @@ export default function Category() {
                 </View>
             </Background>
         )
-
     }
 
     return (
@@ -68,9 +56,9 @@ export default function Category() {
                     keyExtractor={item => item.id}
                     data={games}
                     renderItem={({ item }) => <GameList data={item} />}
+                    contentContainerStyle={{ paddingBottom: 30 }}
                 />
             </AreaList>
-
         </Background>
     )
 }

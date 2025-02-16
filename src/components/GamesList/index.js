@@ -33,7 +33,6 @@ const Container = styled.TouchableOpacity`
     background-color: #121212; /* Para aqueles casos em que não possuir background e o nome do ficar legivel.*/ 
     margin-top: 15px;
     max-height: 300px;
-
 `;
 
 const Content = styled.View`
@@ -47,7 +46,6 @@ const AreaRatig = styled.View`
     flex-direction: row;
     align-items: center;
 `;
-
 
 const Label = styled.Text`
     font-weight: 700;

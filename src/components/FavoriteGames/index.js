@@ -19,12 +19,9 @@ export default function FavoritesGames({ data, gameLocal }) {
         try {
             const storageLocal = await AsyncStorage.getItem('@games')
             let favorites = JSON.parse(storageLocal)
-
             favorites = favorites.filter(game => game.id !== id)
-
             await AsyncStorage.setItem('@games', JSON.stringify(favorites)) // Atualiza o storage local
             gameLocal(favorites) //atualiza o useState que controla a lista de jogos locais. 
-
         } catch (error) {
             console.log(error)
         }
@@ -56,7 +53,6 @@ const Container = styled.TouchableOpacity`
     background-color: #121212; /* Para aqueles casos em que não possuir background e o nome do ficar legivel.*/ 
     margin-top: 15px;
     max-height: 300px;
-
 `;
 
 const Content = styled.View`
@@ -71,16 +67,15 @@ const AreaRatig = styled.View`
     align-items: center;
 `;
 
-
 const Label = styled.Text`
     font-weight: 700;
     color: #ffffff;
 `;
 
 const ContentButton = styled.View`
-flex: 1;
-justify-content: center;
-align-items: center;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 `;
 
 const DeleteButton = styled.TouchableOpacity`

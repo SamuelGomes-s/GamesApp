@@ -8,11 +8,8 @@ export default function Favorites() {
 
     const [games, setGames] = useState([])
 
-
     useEffect(() => {
-
         async function favoritesGames() {
-
             try {
                 const storageLocal = await AsyncStorage.getItem("@games")
                 let favorites = storageLocal ? JSON.parse(storageLocal) : []
@@ -24,16 +21,11 @@ export default function Favorites() {
         favoritesGames()
     }, [games])
 
-
-
-
-
     return (
         <Background>
             <Header title={'My favorites'} />
-
             <AreaList>
-                <List data={games} renderItem={({ item }) => <FavoritesGames data={item}  gameLocal={setGames}/>} />
+                <List data={games} renderItem={({ item }) => <FavoritesGames data={item} gameLocal={setGames} />} />
             </AreaList>
         </Background>
     )

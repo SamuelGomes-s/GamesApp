@@ -7,8 +7,8 @@ import BackIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 let textLorem = 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.';
 
-
 export default function Detail() {
+
     const route = useRoute()
     const { data } = route?.params
     const navigation = useNavigation()
@@ -34,21 +34,18 @@ export default function Detail() {
                         gameExists = true
                     }
                 })
-
             }
             if (!gameExists) {
                 favoritesGames.push(newGame) //Adicionando novo jogo
                 await AsyncStorage.setItem('@games', JSON.stringify(favoritesGames)) // salvando
-                console.log('O jogo n existe, portanto foi salvo')
+                // console.log('O jogo n existe, portanto foi salvo')
                 return
             }
-            console.log('O jogo existe, portanto não foi salvo')
-
+            // console.log('O jogo existe, portanto não foi salvo')
         } catch (error) {
             console.log(error)
         }
     }
-
 
     return (
         <Background>
@@ -84,7 +81,6 @@ export default function Detail() {
                     <Label> {data.rating} </Label>
                 </AreaRatig>
                 <Label style={{ fontSize: 20 }}> {data.name}</Label>
-
                 <AreaList style={{ maxHeight: 85 }}>
                     <Label style={{ fontSize: 20, marginTop: 10 }}>Genres</Label>
                     <List
@@ -94,7 +90,6 @@ export default function Detail() {
                         data={genresGame}
                     />
                 </AreaList>
-
                 <AreaDescription>
                     <Label> Description</Label>
                     <Description numberOfLines={7} ellipsizeMode="tail">
@@ -104,7 +99,6 @@ export default function Detail() {
                         <Label>Read full description</Label>
                     </ButtonModal>
                 </AreaDescription>
-
                 <AreaList style={{}}>
                     <Label style={{ fontSize: 20, marginTop: 10 }}>Platforms</Label>
                     <List
@@ -114,7 +108,6 @@ export default function Detail() {
                         data={platforms}
                     />
                 </AreaList>
-
                 <AreaList style={{}}>
                     <Label style={{ fontSize: 20, marginTop: 10 }}>Stores</Label>
                     <List
@@ -144,7 +137,6 @@ export default function Detail() {
     )
 }
 
-
 const ListImages = ((item) => {
     return (
         <View key={item.id.toString()} style={{ height: 200 }}>
@@ -155,8 +147,8 @@ const ListImages = ((item) => {
         </View>
     )
 })
-const ListGenres = ((item) => {
 
+const ListGenres = ((item) => {
     return (
         <View key={item.id.toString()}>
             <Container BG={'#64748b'} style={{ marginBottom: 10 }}>
@@ -169,7 +161,6 @@ const ListGenres = ((item) => {
 })
 
 const ListPlatforms = ((item) => {
-
     return (
         <View key={item.platform.id.toString()} >
             <Container BG={'#0f172a'}>
@@ -180,6 +171,7 @@ const ListPlatforms = ((item) => {
         </View>
     )
 })
+
 const ListStores = ((item) => {
     return (
         <View key={item.store.id.toString()} style={{ justifyContent: "center" }}>
@@ -191,8 +183,6 @@ const ListStores = ((item) => {
         </View>
     )
 })
-
-
 
 const Background = styled.SafeAreaView`
     flex: 1;
@@ -232,6 +222,7 @@ const Content = styled.View`
     justify-content: center;
     align-items: center;
 `;
+
 const AreaDescription = styled.View`
     height: 200px;
     width:100%;

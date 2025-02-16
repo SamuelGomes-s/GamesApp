@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-
 import styled from "styled-components/native";
 
 export default function CategoryList({ data }) {
@@ -8,11 +7,11 @@ export default function CategoryList({ data }) {
     const navigation = useNavigation()
 
     function goCategory(idCategory) {
-
         navigation.navigate('Category', {
             idCategory
         })
     }
+
     return (
         <Container onPress={() => goCategory(data.id)}>
             <Content>

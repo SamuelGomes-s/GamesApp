@@ -6,50 +6,38 @@ import { ActivityIndicator, Text, View } from "react-native";
 import api from "../../services/GameApi/api";
 import CategoryList from "../../components/CategoryList";
 import GameList from "../../components/GamesList";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
-//d5403774822a4e22be1b215ce2f7e78e // CHAVE API
 let keyApi = 'd5403774822a4e22be1b215ce2f7e78e'
 
 export default function Home() {
-    const gamesPerPage = 5
 
+    const gamesPerPage = 5
     const [categorys, setCategorys] = useState([])
     const [games, setGames] = useState([])
     const [loadingHome, setLoadingHome] = useState(false)
     const [inputText, setInputText] = useState('')
     const [pageGames, setPageGames] = useState(1)
     const [loadingGames, setLoadingGames] = useState(false)
-
     const navigation = useNavigation()
 
     useEffect(() => {
         setInputText('')
         setLoadingHome(true)
-
         async function lookingFor() {
-
             try {
                 await Promise.all([handleCategorys(), HandleGames()]) // Promisse.all permite a busca ao mesmo tempo dos dois dados, categorias e games...
             } catch (error) {
                 console.log(error)
             }
-
             setLoadingHome(false)
-
         }
-
         lookingFor()
-
-
     }, [])
 
-
     async function handleCategorys() {
-
         try {
             const response = await api.get('/genres', {
-
                 params: {
                     key: keyApi,
                     ordering: 'name',// Qual campo usar ao ordenar os resultados.
@@ -58,19 +46,14 @@ export default function Home() {
                 }
             }
             )
-
             const data = response.data.results
             setCategorys(data)
-
         } catch (error) {
             console.log(error)
         }
-
-
     }
 
     async function HandleGames() {
-
         try {
             const response = await api.get('/games', {
                 params: {
@@ -81,7 +64,6 @@ export default function Home() {
                 }
             })
             const data = response.data.results
-
             if (pageGames <= 1) {
                 setGames(data)
             } else {
@@ -92,7 +74,6 @@ export default function Home() {
         } catch (error) {
             console.log(error)
         }
-
     }
 
     function scrollPage() {
@@ -110,17 +91,13 @@ export default function Home() {
                 </View>
             </Background>
         )
-
     }
 
     function searchGame() {
         if (inputText == '') return;
-
         navigation.navigate('Search', { inputText })
-
     }
     function favorites() {
-
         return navigation.navigate('Favorites')
     }
 
@@ -128,7 +105,7 @@ export default function Home() {
         <Background>
             <Header>
                 <ContentHeader>
-                    <NameApp colorText={'#ffffff'}> Game<NameApp colorText={'#ff455f'}>APP</NameApp></NameApp>
+                    <NameApp colorText={'#ffffff'}> Games<NameApp colorText={'#ff455f'}>APP</NameApp></NameApp>
                     <Button BG={'#64748b'} onPress={() => favorites()}>
                         <View>
                             <FavIcon name='bookmarks-outline' color={'#ffffff'} size={20} />
@@ -171,9 +148,7 @@ export default function Home() {
                         <ActivityIndicator size={"large"} color={'#FFFF'} />
                     </View>
                 }
-
             </ContentTrending>
-
         </Background >
     )
 }

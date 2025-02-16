@@ -13,8 +13,7 @@ export default function Header({ title }) {
 
     return (
         <Background>
-
-            <ButtonIcon onPress={()=> goBack()}>
+            <ButtonIcon onPress={() => goBack()}>
                 <BackIcon name='arrow-back-outline' size={30} color={'#FFFFFf'} />
             </ButtonIcon>
             <Title> {title ? title : 'Component'}</Title>
